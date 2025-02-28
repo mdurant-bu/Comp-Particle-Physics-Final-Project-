@@ -44,3 +44,5 @@ for i, (low, high) in enumerate(mass_ranges):
 
 plt.tight_layout()
 plt.show()
+
+'''The plots for the CMS data show the same peaks as in questions 2 and 4, with the exception of the peak in the sixth plot which was assigned to the 4 top quark production.'''
