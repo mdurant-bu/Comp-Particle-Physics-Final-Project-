@@ -13,10 +13,17 @@ E_mu = tree["EEMUO"].array()
 kf_mu = tree["KFMUO"].array()
 
 mask_dimuon = ak.num(px_mu) == 2 #Only get events with 2 muons
-px_mu, py_mu, pz_mu, E_mu, kf_mu = px_mu[mask_dimuon], py_mu[mask_dimuon], pz_mu[mask_dimuon], E_mu[mask_dimuon], kf_mu[mask_dimuon]
+px_mu = px_mu[mask_dimuon]
+py_mu = py_mu[mask_dimuon]
+pz_mu = pz_mu[mask_dimuon]
+E_mu = E_mu[mask_dimuon]
+kf_mu = kf_mu[mask_dimuon]
 
 mask_opposite_charge = (kf_mu[:, 0] * kf_mu[:, 1]) < 0 #Only get events with one positive and one negative muon
-px_mu, py_mu, pz_mu, E_mu = px_mu[mask_opposite_charge], py_mu[mask_opposite_charge], pz_mu[mask_opposite_charge], E_mu[mask_opposite_charge]
+px_mu = px_mu[mask_opposite_charge]
+py_mu = py_mu[mask_opposite_charge]
+pz_mu = pz_mu[mask_opposite_charge]
+E_mu = E_mu[mask_opposite_charge]
 
 E_total = E_mu[:, 0] + E_mu[:, 1]
 px_total = px_mu[:, 0] + px_mu[:, 1]
