@@ -3,8 +3,8 @@ import awkward as ak
 import numpy as np
 import matplotlib.pyplot as plt
 
-file = uproot.open("muons_v2.root")
-tree = file["t3333"]
+f = uproot.open("muons_v2.root")
+tree = f["t3333"]
 
 def compute_kinematics(px, py, pz, E):
     pt = np.sqrt(px**2 + py**2)
