@@ -1,0 +1,64 @@
+import uproot
+import awkward as ak
+import numpy as np
+import matplotlib.pyplot as plt
+
+f = uproot.open("muons_v2.root")
+tree = f["t3333"]
+
+px_mu   = tree["PXMUO"].array()
+py_mu   = tree["PYMUO"].array()
+kf_mu   = tree["KFMUO"].array()
+NMUO    = tree["NMUO"].array()
+
+px_ele  = tree["PXELE"].array()
+py_ele  = tree["PYELE"].array()
+kf_ele  = tree["KFELE"].array()
+NELE    = tree["NELE"].array()
+
+px_miss = tree["PXMISS"].array()
+py_miss = tree["PYMISS"].array()
+
+n_leptons = NMUO + NELE
+mask_single_lepton = n_leptons == 1 #Only keep single lepton events
+print(f"Events with exactly one lepton: {np.sum(mask_single_lepton)}") #Sanity check
+
+px_mu   = px_mu[mask_single_lepton]
+py_mu   = py_mu[mask_single_lepton]
+NMUO    = NMUO[mask_single_lepton]
+
+px_ele  = px_ele[mask_single_lepton]
+py_ele  = py_ele[mask_single_lepton]
+NELE    = NELE[mask_single_lepton]
+
+px_miss = px_miss[mask_single_lepton]
+py_miss = py_miss[mask_single_lepton]
+
+pT_mu  = ak.where(NMUO > 0, np.sqrt(px_mu**2 + py_mu**2), 0) #Compute pt for muons and electrons
+pT_ele = ak.where(NELE > 0, np.sqrt(px_ele**2 + py_ele**2), 0)
+pT_lepton = pT_mu + pT_ele
+
+phi_mu  = ak.where(NMUO > 0, np.arctan2(py_mu, px_mu), 0) #Compute phi for muons and electrons
+phi_ele = ak.where(NELE > 0, np.arctan2(py_ele, px_ele), 0)
+phi_lepton = ak.where(NMUO > 0, phi_mu, phi_ele)
+
+
+pT_nu = np.sqrt(px_miss**2 + py_miss**2) #Compute MET
+phi_miss = np.arctan2(py_miss, px_miss)
+
+delta_phi = np.abs(phi_lepton - phi_miss) #Compute delta phi
+delta_phi = ak.where(delta_phi > np.pi, 2 * np.pi - delta_phi, delta_phi)
+
+MT = np.sqrt(2 * pT_lepton * pT_nu * (1 - np.cos(delta_phi))) # Compute transverse mass
+MT_flat = ak.flatten(MT, axis=None)
+MT_numpy = ak.to_numpy(MT_flat)
+
+plt.figure(figsize=(8, 6))
+plt.hist(MT_numpy / 1000, bins=50, range=(0, 200),
+         histtype="step", linewidth=2, label="W Candidate Events")
+plt.axvline(80.4, color="red", linestyle="dashed", label=" Expected W Mass (80.4 GeV)")
+plt.xlabel("Transverse Mass (GeV)")
+plt.ylabel("Events")
+plt.title("W Boson Candidate Transverse Mass Spectrum")
+plt.legend()
+plt.show()
