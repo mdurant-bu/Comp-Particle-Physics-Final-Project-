@@ -52,4 +52,7 @@ def plot_mass_hist(data, mass_range):
 for mass_range in mass_ranges:
     plot_mass_hist(M_dimuon, mass_range)
 
-'''The '''
+'''There are four discernible peaks in the invariant mass distribution. The first plot has a peak just past 3,000 MeV 
+with a smaller associated peak at about 3,750. The second plot has a peak at about 9,500 MeV with another smaller peak at about 10,000 MeV.
+The third plot has a peak around 90,000 MeV. Finally, the sixth plot has a peak around 700,000 MeV. I will attempt to match these
+peaks to physical objects in question 4.'''
