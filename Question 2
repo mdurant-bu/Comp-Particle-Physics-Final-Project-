@@ -1,1 +1,46 @@
+import uproot
+import awkward as ak
+import numpy as np
+import matplotlib.pyplot as plt
 
+file = uproot.open("muons_v2.root")
+tree = file["t3333"]
+
+px_mu = tree["PXMUO"].array()
+py_mu = tree["PYMUO"].array()
+pz_mu = tree["PZMUO"].array()
+E_mu = tree["EEMUO"].array()
+kf_mu = tree["KFMUO"].array()
+
+mask_dimuon = ak.num(px_mu) == 2 #Only get events with 2 muons
+px_mu, py_mu, pz_mu, E_mu, kf_mu = px_mu[mask_dimuon], py_mu[mask_dimuon], pz_mu[mask_dimuon], E_mu[mask_dimuon], kf_mu[mask_dimuon]
+
+mask_opposite_charge = (kf_mu[:, 0] * kf_mu[:, 1]) < 0 #Only get events with one positive and one negative muon
+px_mu, py_mu, pz_mu, E_mu = px_mu[mask_opposite_charge], py_mu[mask_opposite_charge], pz_mu[mask_opposite_charge], E_mu[mask_opposite_charge]
+
+E_total = E_mu[:, 0] + E_mu[:, 1]
+px_total = px_mu[:, 0] + px_mu[:, 1]
+py_total = py_mu[:, 0] + py_mu[:, 1]
+pz_total = pz_mu[:, 0] + pz_mu[:, 1]
+M_dimuon = np.sqrt(E_total**2 - px_total**2 - py_total**2 - pz_total**2)
+
+mass_ranges = [
+    (0, 5000),
+    (5000, 15000),
+    (15000, 125000),
+    (100000, 200000),
+    (200000, 400000),
+    (400000, 1400000)
+]
+
+def plot_mass_hist(data, mass_range):
+    plt.figure(figsize=(7, 5))
+    plt.hist(data, bins=50, range=mass_range, alpha=0.7, color="purple", label=f"{mass_range[0]} - {mass_range[1]} MeV")
+    plt.xlabel("Dimuon Invariant Mass (MeV)")
+    plt.ylabel("Entries")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+for mass_range in mass_ranges:
+    plot_mass_hist(M_dimuon, mass_range)
