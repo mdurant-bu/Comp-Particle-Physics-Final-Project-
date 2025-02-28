@@ -3,8 +3,8 @@ import awkward as ak
 import numpy as np
 import matplotlib.pyplot as plt
 
-file = uproot.open("muons_v2.root")
-tree = file["t3333"]
+f = uproot.open("muons_v2.root")
+tree = f["t3333"]
 
 px_mu = tree["PXMUO"].array()
 py_mu = tree["PYMUO"].array()
