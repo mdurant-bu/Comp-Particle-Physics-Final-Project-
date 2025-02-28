@@ -62,3 +62,5 @@ plt.ylabel("Events")
 plt.title("W Boson Candidate Transverse Mass Spectrum")
 plt.legend()
 plt.show()
+
+'''The alignment of the peak with the vertical line (which indicates the accepted W boson mass) suggests that there is evidence for the W boson being present in the data set.'''
