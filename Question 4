@@ -59,3 +59,8 @@ def plot_mass_hist(data, mass_range, resonance_lines=[]):
 
 for i, mass_range in enumerate(mass_ranges):
     plot_mass_hist(M_dimuon, mass_range, resonance_lines)
+
+'''The vertical lines show represent the known masses of physical objects that could be present in our data. The first plot's peak matches
+the J/Psi mass at 3.10 GeV (and its first excited state at about 3.75 GeV. The second plot's peak matches the Upsilon meson mass at 9.46 GeV 
+and the first excited state at about 10 GeV. The third plot's peak matches the Z boson mass at 90 GeV. Finally, the peak in the sixth plot
+seems to align with the mass of the 4 top quark production process.'''
